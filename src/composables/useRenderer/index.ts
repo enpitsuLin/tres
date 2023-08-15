@@ -134,24 +134,24 @@ export function useRenderer(
     failIfMajorPerformanceCaveat: toValue(options.failIfMajorPerformanceCaveat)
   }))
 
-  const renderer = shallowRef<WebGLRenderer>(new WebGLRenderer(webGLRendererConstructorParameters.value))
+  const renderer = shallowRef<WebGLRenderer>()
 
   // since the properties set via the constructor can't be updated dynamically,
   // the renderer is recreated once they change
   watch(webGLRendererConstructorParameters, () => {
-    renderer.value.dispose()
+    renderer.value?.dispose()
     renderer.value = new WebGLRenderer(webGLRendererConstructorParameters.value)
   })
 
   watchEffect(() => {
-    renderer.value.setSize(sizes.width.value, sizes.height.value)
+    renderer.value?.setSize(sizes.width.value, sizes.height.value)
   })
 
 
   const { pixelRatio } = useDevicePixelRatio()
 
   watchEffect(() => {
-    renderer.value.setPixelRatio(pixelRatio.value)
+    renderer.value?.setPixelRatio(pixelRatio.value)
   })
 
   const { logError } = useLogger()
@@ -211,7 +211,7 @@ export function useRenderer(
     }
 
     const setValueOrDefault = <T>(option: MaybeRefOrGetter<T>, pathInThree: string) =>
-      set(renderer.value, pathInThree, getValue(option, pathInThree))
+      set(renderer.value ?? {}, pathInThree, getValue(option, pathInThree))
 
     setValueOrDefault(options.shadows, 'shadowMap.enabled')
     setValueOrDefault(options.toneMapping, 'toneMapping')
@@ -223,7 +223,7 @@ export function useRenderer(
     const clearColor = getValue(options.clearColor, 'clearColor')
 
     if (clearColor)
-      renderer.value.setClearColor(
+      renderer.value?.setClearColor(
         clearColor ?
           normalizeColor(clearColor) :
           new Color(0x000000) // default clear color is not easily/efficiently retrievable from three
@@ -234,7 +234,7 @@ export function useRenderer(
   const { pause, resume, onLoop } = useRenderLoop()
 
   onLoop(() => {
-    if (camera.value && !toValue(disableRender))
+    if (renderer.value && camera.value && !toValue(disableRender))
       renderer.value.render(scene.value, camera.value)
   })
 
@@ -242,8 +242,8 @@ export function useRenderer(
 
   onUnmounted(() => {
     pause() // TODO should the render loop pause itself if there is no more renderer? 🤔 What if there is another renderer which needs the loop?
-    renderer.value.dispose()
-    renderer.value.forceContextLoss()
+    renderer.value?.dispose()
+    renderer.value?.forceContextLoss()
   })
 
   if (import.meta.hot)

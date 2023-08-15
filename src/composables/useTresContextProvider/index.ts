@@ -11,7 +11,7 @@ export type TresContext = {
   scene: ShallowRef<Scene>;
   camera: ComputedRef<Camera | undefined>;
   cameras: DeepReadonly<Ref<Camera[]>>;
-  renderer: ShallowRef<WebGLRenderer>
+  renderer: ShallowRef<WebGLRenderer | undefined>
   raycaster: ShallowRef<Raycaster>
   controls: Ref<(EventDispatcher & { enabled: boolean }) | null>
   extend: (objects: any) => void
