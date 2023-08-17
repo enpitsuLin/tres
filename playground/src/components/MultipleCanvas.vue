@@ -28,6 +28,13 @@ const log = () => {
   console.log(3)
 }
 
+const sphereRadius = ref(2)
+setTimeout(() => {
+  sphereRadius.value = 1
+  setTimeout(() => {
+    sphereRadius.value = 4
+  }, 3000)
+}, 3000)
 </script>
 <template>
   <div class="flex">
@@ -55,7 +62,7 @@ const log = () => {
         <TresAmbientLight :intensity="0.5" />
 
         <TresMesh :position="[0, 4, 0]" cast-shadow>
-          <TresSphereGeometry :args="[2, 32, 32]" />
+          <TresSphereGeometry :args="[sphereRadius, 32, 32]" />
           <TresMeshToonMaterial color="yellow" />
         </TresMesh>
 
