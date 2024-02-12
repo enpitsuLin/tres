@@ -24,4 +24,4 @@
 
 返回的 [Intersection](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/three/src/core/Raycaster.d.ts#L16) 包括触发事件的[Object3D](https://threejs.org/docs/index.html?q=object#api/en/core/Object3D) 。您可以通过`intersection.object` 访问它。
 
-默认情况下，不会组织事件冒泡。可以通过使用`blocks-pointer-events` 属性来实现此行为。
+默认情况下，不会阻止事件冒泡。可以通过使用`blocks-pointer-events` 属性来实现此行为。
