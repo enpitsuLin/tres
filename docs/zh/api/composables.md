@@ -2,13 +2,13 @@
 
 Vue 3的[Composition API](https://vuejs.org/guide/extras/composition-api-faq.html#what-is-composition-api) 允许您创建可在组件之间共享的可重用逻辑。它还允许您创建可在组件中使用的自定义钩子。
 
-**TresJS** 充分利用这个API创建了一组合式函数，可用于创建动画、与场景交互等。它还允许您创建更复杂的场景，不仅使用Vue组件（纹理、加载器等）实现。
+**TresJS** 充分利用这个API创建了一组组合式函数，可用于创建动画、与场景交互等。它还允许您创建更复杂的场景，不仅使用Vue组件（纹理、加载器等）实现。
 
 **TresJS** 核心在内部使用这些组合式函数，因此可以使用与核心相同API。例如，需要在内部渲染循环中更新的组件使用 `useRenderLoop` 来注册一个回调函数，每当渲染器更新场景时都会调用该函数。
 
 ## useRenderLoop
 
-`useRenderLoop` 是 **TresJS** 动画的核心。它可以注册一个回调函数，该函数将在原生刷新率下被调用。这是 **TresJS** 中最重要的可组合项。
+`useRenderLoop` 是 **TresJS** 动画的核心。它可以注册一个回调函数，该函数将在原生刷新率下被调用。这是 **TresJS** 中最重要的组合式函数。
 
 ```ts
 const { onLoop, resume } = useRenderLoop()
@@ -19,10 +19,12 @@ onLoop(({ delta, elapsed, clock }) => {
 ```
 
 ::: warning
+
 请注意使用此组合式函数的性能影响。它将在每一帧运行，因此如果在回调中有大量逻辑，可能会影响应用程序的性能。特别是如果您正在更新响应式状态或引用。
 :::
 
 `onLoop` 回调接收一个基于[THREE clock](https://threejs.org/docs/?q=clock#api/en/core/Clock)的对象，该对象具有以下属性：
+
 
 - `delta`: 当前帧与上一帧之间的时间差。这是自上一帧以来的时间（以秒为单位）。
 - `elapsed`: 自渲染循环开始以来的时间。
@@ -77,6 +79,7 @@ console.log(isActive) // true
 
 `useLoader` 组合式函数可以使用 [THREE.js loaders](https://threejs.org/docs/#manual/en/introduction/Loading-3D-models) 加载器加载资源。它返回一个带有加载后资源的Promise。
 
+
 ```ts
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 
@@ -94,6 +97,7 @@ const { scene } = await useLoader(THREE.GLTFLoader, 'path/to/asset.gltf')
 ```
 
 ## useTexture
+
 
 `useTexture` 组合式函数可以使用 [THREE.js texture loader](https://threejs.org/docs/#api/en/loaders/TextureLoader) 纹理加载器加载纹理。它返回一个带有已加载纹理的Promise。
 
@@ -154,6 +158,7 @@ const { map, displacementMap, normalMap, roughnessMap, metalnessMap, aoMap, alph
 
 `useSeek` 组合式函数提供了一些实用工具，可轻松遍历和浏览复杂的ThreeJS场景和对象子图。它导出了4个函数，允许您根据特定属性查找子对象。
 
+
 ```ts
 const { seek, seekByName, seekAll, seekAllByName } = useSeek()
 ```
@@ -193,7 +198,9 @@ watch(character, ({ model }) => {
 
 ## useTresContext
 
+
 这个组合式函数提供对包含多个有用属性的状态模型的访问。
+
 
 ```ts
 const { camera, renderer, camera, cameras } = useTresContext()
